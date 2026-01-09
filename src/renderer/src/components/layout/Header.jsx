@@ -23,8 +23,10 @@ function Header({ isMaximized }) {
 
             {/* Search Bar (centered) */}
             {showSearch && (
-                <div className="flex-1 flex items-center justify-center no-drag">
-                    <SearchBar />
+                <div className="flex-1 flex items-center justify-center">
+                    <div className="no-drag">
+                        <SearchBar />
+                    </div>
                 </div>
             )}
 

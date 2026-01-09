@@ -12,6 +12,8 @@ function createWindow() {
     minHeight: 700,
     show: false,
     frame: false, // Frameless window for custom title bar
+    resizable: true,
+    thickFrame: true, // Required for resizing on Windows with frameless windows
     transparent: false,
     backgroundColor: '#0a0a0f',
     autoHideMenuBar: true,
