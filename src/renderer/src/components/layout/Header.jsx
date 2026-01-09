@@ -1,9 +1,15 @@
 import { Minus, Square, X, Copy } from 'lucide-react'
+import { useLocation } from 'react-router-dom'
+import SearchBar from '../SearchBar'
 
 function Header({ isMaximized }) {
+    const location = useLocation()
     const handleMinimize = () => window.electronAPI.window.minimize()
     const handleMaximize = () => window.electronAPI.window.maximize()
     const handleClose = () => window.electronAPI.window.close()
+
+    // Show search bar on Dashboard and Files pages (not Settings)
+    const showSearch = location.pathname !== '/settings'
 
     return (
         <header className="flex items-center justify-between h-11 bg-bg-secondary border-b border-glass-border drag-region">
@@ -14,6 +20,13 @@ function Header({ isMaximized }) {
                 </div>
                 <span className="text-sm font-semibold text-text-secondary">DesktopSort</span>
             </div>
+
+            {/* Search Bar (centered) */}
+            {showSearch && (
+                <div className="flex-1 flex items-center justify-center no-drag">
+                    <SearchBar />
+                </div>
+            )}
 
             {/* Window Controls */}
             <div className="flex items-center no-drag">

@@ -57,5 +57,10 @@ contextBridge.exposeInMainWorld('electronAPI', {
   shell: {
     openPath: (path) => ipcRenderer.invoke('shell:openPath', path),
     showInFolder: (path) => ipcRenderer.invoke('shell:showItemInFolder', path)
+  },
+  
+  // Search
+  search: {
+    query: (query, limit = 50) => ipcRenderer.invoke('search:query', query, limit)
   }
 })

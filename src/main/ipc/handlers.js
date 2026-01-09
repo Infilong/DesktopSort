@@ -4,6 +4,7 @@ import { categorizeFiles, getCategories } from '../services/categoryEngine'
 import { organizeFiles, moveFile, undoOperation, restoreDesktop } from '../services/fileOrganizer'
 import { getHistory, clearHistory } from '../services/historyManager'
 import { getSettings, updateSettings } from '../services/settingsManager'
+import { buildSearchIndex, searchFiles } from '../services/searchIndex'
 import path from 'path'
 import fs from 'fs'
 
@@ -18,6 +19,8 @@ export function setupIpcHandlers() {
   ipcMain.handle('files:scan', async () => {
     try {
       const files = await scanDesktop()
+      // Build search index for instant search
+      buildSearchIndex(files)
       return { success: true, data: files }
     } catch (error) {
       return { success: false, error: error.message }
@@ -273,6 +276,16 @@ export function setupIpcHandlers() {
     try {
       shell.showItemInFolder(path)
       return { success: true }
+    } catch (error) {
+      return { success: false, error: error.message }
+    }
+  })
+
+  // Search
+  ipcMain.handle('search:query', async (_, query, limit = 50) => {
+    try {
+      const results = searchFiles(query, limit)
+      return { success: true, data: results }
     } catch (error) {
       return { success: false, error: error.message }
     }
