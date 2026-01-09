@@ -2,6 +2,10 @@
 
 A modern desktop file organizer built with Electron, React, and Tailwind CSS.
 
+<div align="center">
+  <video src="assets/demo.mp4" width="800" controls></video>
+</div>
+
 ## Features
 
 - 🗂️ **Smart File Organization** - Automatically categorize and organize desktop files

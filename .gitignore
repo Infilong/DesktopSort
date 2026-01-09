@@ -31,3 +31,6 @@ Thumbs.db
 # Cache
 .cache/
 .eslintcache
+
+# Documentation
+project_learning_plan.md
