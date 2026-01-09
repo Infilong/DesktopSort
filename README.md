@@ -3,7 +3,8 @@
 A modern desktop file organizer built with Electron, React, and Tailwind CSS.
 
 <div align="center">
-  <video src="assets/demo.mp4" width="800" controls></video>
+  <h3>🎥 <a href="assets/demo.mp4">Watch the Demo Video</a></h3>
+  <p>(Click to play)</p>
 </div>
 
 ## Features
