@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
+import { useTranslation } from 'react-i18next'
 import {
     Sparkles,
     RefreshCw,
@@ -44,6 +45,7 @@ const colorMap = {
 }
 
 function DashboardPage() {
+    const { t } = useTranslation()
     const navigate = useNavigate()
     const { isLoading, scanFiles, getCategoryStats } = useFileStore()
     const { history, loadHistory } = useHistoryStore()
@@ -92,17 +94,17 @@ function DashboardPage() {
     const handleOrganize = async () => {
         const unorganizedResult = await window.electronAPI.files.scanUnorganized()
         if (!unorganizedResult.success || unorganizedResult.data.length === 0) {
-            setActionResult({ type: 'info', message: 'No unorganized files on your desktop!' })
+            setActionResult({ type: 'info', message: t('messages.noUnorganized', 'No unorganized files on your desktop!') })
             return
         }
 
         const filesToOrganize = unorganizedResult.data
 
         const confirmResult = await window.electronAPI.dialog.confirm({
-            title: 'Organize Desktop Files',
-            message: `Organize ${filesToOrganize.length} files?`,
-            detail: `Files will be moved to categorized folders inside "DesktopSort".\n\nYou can restore them anytime.`,
-            confirmText: 'Yes, Organize'
+            title: t('dashboard.organizeFiles'),
+            message: t('messages.confirmOrganize', { count: filesToOrganize.length }),
+            detail: t('messages.organizeDetail', 'Files will be moved to categorized folders inside "DesktopSort".\n\nYou can restore them anytime.'),
+            confirmText: t('buttons.yesOrganize', 'Yes, Organize')
         })
 
         if (!confirmResult.confirmed) return
@@ -114,10 +116,10 @@ function DashboardPage() {
             const result = await window.electronAPI.organize.execute({ files: filesToOrganize, mode: 'move' })
 
             if (result.success) {
-                setActionResult({ type: 'success', message: `Organized ${result.data.totalMoved} files!` })
+                setActionResult({ type: 'success', message: t('messages.organizedSuccess', { count: result.data.totalMoved }) })
                 await loadAllData()
             } else {
-                setActionResult({ type: 'error', message: result.error || 'Failed to organize' })
+                setActionResult({ type: 'error', message: result.error || t('messages.organizeFailed', 'Failed to organize') })
             }
         } catch (error) {
             setActionResult({ type: 'error', message: error.message })
@@ -128,15 +130,15 @@ function DashboardPage() {
 
     const handleRestore = async () => {
         if (organizedCount === 0) {
-            setActionResult({ type: 'info', message: 'No files to restore!' })
+            setActionResult({ type: 'info', message: t('messages.noRestored', 'No files to restore!') })
             return
         }
 
         const confirmResult = await window.electronAPI.dialog.confirm({
-            title: 'Restore Desktop',
-            message: `Restore ${organizedCount} files to Desktop?`,
-            detail: `All files will be moved back to your Desktop.`,
-            confirmText: 'Yes, Restore'
+            title: t('dashboard.restoreDesktop'),
+            message: t('messages.confirmRestore', { count: organizedCount }),
+            detail: t('messages.restoreDetail', 'All files will be moved back to your Desktop.'),
+            confirmText: t('buttons.yesRestore', 'Yes, Restore')
         })
 
         if (!confirmResult.confirmed) return
@@ -148,10 +150,10 @@ function DashboardPage() {
             const result = await window.electronAPI.organize.restore()
 
             if (result.success) {
-                setActionResult({ type: 'success', message: `Restored ${result.data.totalRestored} files!` })
+                setActionResult({ type: 'success', message: t('messages.restoredSuccess', { count: result.data.totalRestored }) })
                 await loadAllData()
             } else {
-                setActionResult({ type: 'error', message: result.error || 'Failed to restore' })
+                setActionResult({ type: 'error', message: result.error || t('messages.restoreFailed', 'Failed to restore') })
             }
         } catch (error) {
             setActionResult({ type: 'error', message: error.message })
@@ -167,8 +169,8 @@ function DashboardPage() {
             {/* Header */}
             <header className="flex items-center justify-between">
                 <div>
-                    <h1 className="text-3xl font-bold text-text-primary">Dashboard</h1>
-                    <p className="text-sm text-text-muted mt-1">Manage and organize your desktop files</p>
+                    <h1 className="text-3xl font-bold text-text-primary">{t('nav.dashboard')}</h1>
+                    <p className="text-sm text-text-muted mt-1">{t('dashboard.subtitle', 'Manage and organize your desktop files')}</p>
                 </div>
 
                 <button
@@ -177,7 +179,7 @@ function DashboardPage() {
                     className="flex items-center gap-2 px-6 py-3 rounded-lg bg-glass hover:bg-glass-hover border border-glass-border text-text-secondary hover:text-blue-500 transition-colors font-semibold disabled:opacity-50"
                 >
                     <RefreshCw size={18} className={isLoading ? 'animate-spin' : ''} />
-                    <span>Refresh</span>
+                    <span>{t('buttons.refresh', 'Refresh')}</span>
                 </button>
             </header>
 
@@ -196,7 +198,7 @@ function DashboardPage() {
                         <p className="text-4xl font-bold text-text-primary">{organizedCount}</p>
                         <div className="flex items-center gap-2 mt-2">
                             <FolderOpen size={16} className="text-emerald-500" />
-                            <span className="text-xs uppercase font-bold text-text-muted">Sorted</span>
+                            <span className="text-xs uppercase font-bold text-text-muted">{t('dashboard.sorted', 'Sorted')}</span>
                         </div>
                     </div>
                 </div>
@@ -214,9 +216,9 @@ function DashboardPage() {
                             {isOrganizing ? <RefreshCw size={20} className="animate-spin" /> : <Sparkles size={20} />}
                         </div>
                         <div className="text-left">
-                            <p className="font-bold text-base">Organize Files</p>
+                            <p className="font-bold text-base">{t('dashboard.organizeFiles')}</p>
                             <p className="text-sm opacity-80 mt-0.5">
-                                {unorganizedCount === 0 ? 'All tidy!' : `${unorganizedCount} items to sort`}
+                                {unorganizedCount === 0 ? t('dashboard.allTidy', 'All tidy!') : t('dashboard.itemsToSort', { count: unorganizedCount })}
                             </p>
                         </div>
                     </motion.button>
@@ -232,9 +234,9 @@ function DashboardPage() {
                             {isRestoring ? <RefreshCw size={20} className="animate-spin" /> : <Undo2 size={20} />}
                         </div>
                         <div className="text-left">
-                            <p className="font-bold text-base">Restore Desktop</p>
+                            <p className="font-bold text-base">{t('dashboard.restoreDesktop')}</p>
                             <p className="text-sm opacity-80 mt-0.5">
-                                {organizedCount === 0 ? 'Nothing to restore' : `Restore ${organizedCount} items`}
+                                {organizedCount === 0 ? t('dashboard.nothingToRestore', 'Nothing to restore') : t('dashboard.restoreItemsCount', { count: organizedCount })}
                             </p>
                         </div>
                     </motion.button>
@@ -259,12 +261,12 @@ function DashboardPage() {
             {/* Categories */}
             <section className="flex-1 min-h-0 flex flex-col">
                 <div className="flex items-center justify-between mb-4">
-                    <h2 className="text-lg font-bold text-text-secondary uppercase tracking-wide">Categories</h2>
+                    <h2 className="text-lg font-bold text-text-secondary uppercase tracking-wide">{t('dashboard.categories')}</h2>
                     <button
                         onClick={() => navigate('/files')}
                         className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm text-blue-500 hover:bg-blue-500/10 font-semibold transition-colors"
                     >
-                        <span>View all</span>
+                        <span>{t('buttons.viewAll', 'View all')}</span>
                         <ArrowRight size={14} />
                     </button>
                 </div>
@@ -287,7 +289,7 @@ function DashboardPage() {
                                         <IconComponent size={24} className={colors.icon} />
                                     </div>
                                     <p className={`text-2xl font-bold ${colors.text}`}>{cat.count}</p>
-                                    <p className="text-xs text-text-muted font-bold uppercase mt-2 truncate w-full">{cat.name}</p>
+                                    <p className="text-xs text-text-muted font-bold uppercase mt-2 truncate w-full">{t(`categories.${cat.id.toLowerCase()}`, cat.name)}</p>
                                 </motion.button>
                             )
                         })}

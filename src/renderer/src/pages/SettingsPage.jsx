@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
+import { useTranslation } from 'react-i18next'
 import {
     Settings,
     Monitor,
@@ -12,13 +13,39 @@ import {
     CheckCircle,
     History,
     Trash2,
-    Undo2
+    Undo2,
+    Languages
 } from 'lucide-react'
 import { useSettingsStore } from '../stores/settingsStore'
 import { useHistoryStore } from '../stores/historyStore'
 import { useFileStore } from '../stores/fileStore'
 
+const LANGUAGES = [
+    { code: 'auto', name: 'Auto (System)' },
+    { code: 'en', name: 'English' },
+    { code: 'zh', name: '中文 (简体)' },
+    { code: 'hi', name: 'हिन्दी' },
+    { code: 'es', name: 'Español' },
+    { code: 'fr', name: 'Français' },
+    { code: 'ar', name: 'العربية' },
+    { code: 'bn', name: 'বাংলা' },
+    { code: 'pt', name: 'Português' },
+    { code: 'ru', name: 'Русский' },
+    { code: 'ur', name: 'اردو' },
+    { code: 'id', name: 'Bahasa Indonesia' },
+    { code: 'de', name: 'Deutsch' },
+    { code: 'ja', name: '日本語' },
+    { code: 'ko', name: '한국어' },
+    { code: 'it', name: 'Italiano' },
+    { code: 'tr', name: 'Türkçe' },
+    { code: 'vi', name: 'Tiếng Việt' },
+    { code: 'mr', name: 'मराठी' },
+    { code: 'te', name: 'తెలుగు' },
+    { code: 'ta', name: 'தமிழ்' }
+]
+
 function SettingsPage() {
+    const { t, i18n } = useTranslation()
     const { settings, updateSettings, loadSettings, isLoading } = useSettingsStore()
     const { history, clearHistory, loadHistory } = useHistoryStore()
     const { scanFiles } = useFileStore()
@@ -54,6 +81,17 @@ function SettingsPage() {
             document.body.classList.remove('light')
         }
     }, [localSettings.theme])
+
+    // Sync i18n when language setting changes
+    useEffect(() => {
+        if (localSettings.language) {
+            if (localSettings.language === 'auto') {
+                i18n.changeLanguage(navigator.language.split('-')[0])
+            } else {
+                i18n.changeLanguage(localSettings.language)
+            }
+        }
+    }, [localSettings.language])
 
     const handleSave = async () => {
         try {
@@ -102,8 +140,8 @@ function SettingsPage() {
             {/* Header */}
             <div className="flex items-center justify-between">
                 <div>
-                    <h1 className="text-3xl font-bold tracking-tight">Settings</h1>
-                    <p className="text-text-secondary mt-1 font-medium">Configure your preferences</p>
+                    <h1 className="text-3xl font-bold tracking-tight">{t('settings.title')}</h1>
+                    <p className="text-text-secondary mt-1 font-medium">{t('settings.titleDescription', 'Configure your preferences')}</p>
                 </div>
 
                 {hasChanges && (
@@ -117,12 +155,92 @@ function SettingsPage() {
                         {saveStatus === 'saving' ? (
                             <>Saving...</>
                         ) : saveStatus === 'saved' ? (
-                            <><CheckCircle size={18} /> Saved</>
+                            <><CheckCircle size={18} /> {t('settings.saved', 'Saved')}</>
                         ) : (
-                            <><Save size={18} /> Save Changes</>
+                            <><Save size={18} /> {t('settings.saveChanges', 'Save Changes')}</>
                         )}
                     </motion.button>
                 )}
+            </div>
+
+            {/* Language & Appearance Settings */}
+            <div className="section-card p-8">
+                <div className="flex items-center gap-3 mb-6">
+                    <div className="w-10 h-10 rounded-xl bg-indigo-500/10 flex items-center justify-center">
+                        <Languages size={22} className="text-indigo-500" />
+                    </div>
+                    <div>
+                        <h2 className="text-lg font-bold">{t('settings.general')}</h2>
+                        <p className="text-text-muted text-sm">{t('settings.generalDescription', 'Language and visual preferences')}</p>
+                    </div>
+                </div>
+
+                <div className="space-y-6 pl-2">
+                    {/* Language Selector */}
+                    <div>
+                        <label className="block text-sm font-semibold text-text-secondary mb-3">{t('settings.language')}</label>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="relative">
+                                <select
+                                    value={localSettings.language || 'auto'}
+                                    onChange={(e) => setLocalSettings({ ...localSettings, language: e.target.value })}
+                                    className="w-full bg-glass border border-glass-border rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none cursor-pointer"
+                                >
+                                    {LANGUAGES.map((lang) => (
+                                        <option key={lang.code} value={lang.code}>
+                                            {lang.name}
+                                        </option>
+                                    ))}
+                                </select>
+                                <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-text-muted">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6" /></svg>
+                                </div>
+                            </div>
+                            <p className="text-xs text-text-muted flex items-center">
+                                {t('settings.languageDescription')}
+                            </p>
+                        </div>
+                    </div>
+
+                    <div className="h-px bg-glass-border w-full my-6" />
+
+                    <div>
+                        <label className="block text-sm font-semibold text-text-secondary mb-3">{t('settings.theme')}</label>
+                        <div className="grid grid-cols-2 gap-4">
+                            <button
+                                onClick={() => setLocalSettings({ ...localSettings, theme: 'dark' })}
+                                className={`flex items-center gap-3 p-4 rounded-xl border-2 transition-all ${localSettings.theme === 'dark'
+                                    ? 'border-blue-500 bg-blue-500/5'
+                                    : 'border-glass-border hover:border-text-secondary/30'
+                                    }`}
+                            >
+                                <div className="w-8 h-8 rounded-lg bg-gray-800 flex items-center justify-center text-white">
+                                    <Moon size={16} />
+                                </div>
+                                <div className="text-left">
+                                    <p className={`font-bold ${localSettings.theme === 'dark' ? 'text-blue-500' : ''}`}>{t('settings.dark')}</p>
+                                    <p className="text-xs text-text-muted">{t('settings.darkDescription', 'Dark background')}</p>
+                                </div>
+                            </button>
+
+                            <button
+                                onClick={() => setLocalSettings({ ...localSettings, theme: 'light' })}
+                                className={`flex items-center gap-3 p-4 rounded-xl border-2 transition-all ${localSettings.theme === 'light'
+                                    ? 'border-blue-500 bg-blue-500/5'
+                                    : 'border-glass-border hover:border-text-secondary/30'
+                                    }`}
+                            >
+                                <div className="w-8 h-8 rounded-lg bg-white border border-gray-200 flex items-center justify-center text-orange-500">
+                                    <Sun size={16} />
+                                </div>
+                                <div className="text-left">
+                                    <p className={`font-bold ${localSettings.theme === 'light' ? 'text-blue-500' : ''}`}>{t('settings.light')}</p>
+                                    <p className="text-xs text-text-muted">{t('settings.lightDescription', 'Light background')}</p>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             {/* Organization Settings */}
@@ -132,35 +250,35 @@ function SettingsPage() {
                         <FolderOpen size={22} className="text-blue-500" />
                     </div>
                     <div>
-                        <h2 className="text-lg font-bold">Organization</h2>
-                        <p className="text-text-muted text-sm">How files are organized</p>
+                        <h2 className="text-lg font-bold">{t('settings.organization')}</h2>
+                        <p className="text-text-muted text-sm">{t('settings.organizationDescription', 'How files are organized')}</p>
                     </div>
                 </div>
 
                 <div className="space-y-6 pl-2">
                     <div>
-                        <label className="block text-sm font-semibold text-text-secondary mb-3">Default Mode</label>
+                        <label className="block text-sm font-semibold text-text-secondary mb-3">{t('settings.defaultMode', 'Default Mode')}</label>
                         <div className="grid grid-cols-2 gap-4">
                             <button
                                 onClick={() => setLocalSettings({ ...localSettings, organizeMode: 'move' })}
                                 className={`p-4 rounded-xl border-2 text-left transition-all ${localSettings.organizeMode === 'move'
-                                        ? 'border-blue-500 bg-blue-500/5'
-                                        : 'border-glass-border hover:border-text-secondary/30'
+                                    ? 'border-blue-500 bg-blue-500/5'
+                                    : 'border-glass-border hover:border-text-secondary/30'
                                     }`}
                             >
-                                <p className={`font-bold ${localSettings.organizeMode === 'move' ? 'text-blue-500' : ''}`}>Move to Dashboard</p>
-                                <p className="text-xs text-text-muted mt-1">Move files to organized folders</p>
+                                <p className={`font-bold ${localSettings.organizeMode === 'move' ? 'text-blue-500' : ''}`}>{t('settings.move', 'Move')}</p>
+                                <p className="text-xs text-text-muted mt-1">{t('settings.moveDescription', 'Move files to organized folders')}</p>
                             </button>
 
                             <button
                                 onClick={() => setLocalSettings({ ...localSettings, organizeMode: 'copy' })}
                                 className={`p-4 rounded-xl border-2 text-left transition-all ${localSettings.organizeMode === 'copy'
-                                        ? 'border-blue-500 bg-blue-500/5'
-                                        : 'border-glass-border hover:border-text-secondary/30'
+                                    ? 'border-blue-500 bg-blue-500/5'
+                                    : 'border-glass-border hover:border-text-secondary/30'
                                     }`}
                             >
-                                <p className={`font-bold ${localSettings.organizeMode === 'copy' ? 'text-blue-500' : ''}`}>Copy</p>
-                                <p className="text-xs text-text-muted mt-1">Copy files, keep originals</p>
+                                <p className={`font-bold ${localSettings.organizeMode === 'copy' ? 'text-blue-500' : ''}`}>{t('settings.copy', 'Copy')}</p>
+                                <p className="text-xs text-text-muted mt-1">{t('settings.copyDescription', 'Copy files, keep originals')}</p>
                             </button>
                         </div>
                     </div>
@@ -168,8 +286,8 @@ function SettingsPage() {
                     <div className="space-y-4 pt-2">
                         <div className="flex items-center justify-between">
                             <div>
-                                <p className="font-semibold">Confirm before organizing</p>
-                                <p className="text-xs text-text-muted">Show confirmation dialog before organizing files</p>
+                                <p className="font-semibold">{t('settings.confirmBeforeOrganize', 'Confirm before organizing')}</p>
+                                <p className="text-xs text-text-muted">{t('settings.confirmDescription', 'Show confirmation dialog before organizing files')}</p>
                             </div>
                             <button
                                 onClick={() => setLocalSettings({ ...localSettings, confirmBeforeOrganize: !localSettings.confirmBeforeOrganize })}
@@ -183,8 +301,8 @@ function SettingsPage() {
 
                         <div className="flex items-center justify-between">
                             <div>
-                                <p className="font-semibold">Show preview</p>
-                                <p className="text-xs text-text-muted">Preview changes before executing</p>
+                                <p className="font-semibold">{t('settings.showPreview', 'Show preview')}</p>
+                                <p className="text-xs text-text-muted">{t('settings.previewDescription', 'Preview changes before executing')}</p>
                             </div>
                             <button
                                 onClick={() => setLocalSettings({ ...localSettings, showPreview: !localSettings.showPreview })}
@@ -199,84 +317,6 @@ function SettingsPage() {
                 </div>
             </div>
 
-            {/* Appearance Settings */}
-            <div className="section-card p-8">
-                <div className="flex items-center gap-3 mb-6">
-                    <div className="w-10 h-10 rounded-xl bg-orange-500/10 flex items-center justify-center">
-                        <Monitor size={22} className="text-orange-500" />
-                    </div>
-                    <div>
-                        <h2 className="text-lg font-bold">Appearance</h2>
-                        <p className="text-text-muted text-sm">Customize the look and feel</p>
-                    </div>
-                </div>
-
-                <div className="space-y-6 pl-2">
-                    <div>
-                        <label className="block text-sm font-semibold text-text-secondary mb-3">Theme</label>
-                        <div className="grid grid-cols-2 gap-4">
-                            <button
-                                onClick={() => setLocalSettings({ ...localSettings, theme: 'dark' })}
-                                className={`flex items-center gap-3 p-4 rounded-xl border-2 transition-all ${localSettings.theme === 'dark'
-                                        ? 'border-blue-500 bg-blue-500/5'
-                                        : 'border-glass-border hover:border-text-secondary/30'
-                                    }`}
-                            >
-                                <div className="w-8 h-8 rounded-lg bg-gray-800 flex items-center justify-center text-white">
-                                    <Moon size={16} />
-                                </div>
-                                <div className="text-left">
-                                    <p className={`font-bold ${localSettings.theme === 'dark' ? 'text-blue-500' : ''}`}>Dark</p>
-                                    <p className="text-xs text-text-muted">Dark background</p>
-                                </div>
-                            </button>
-
-                            <button
-                                onClick={() => setLocalSettings({ ...localSettings, theme: 'light' })}
-                                className={`flex items-center gap-3 p-4 rounded-xl border-2 transition-all ${localSettings.theme === 'light'
-                                        ? 'border-blue-500 bg-blue-500/5'
-                                        : 'border-glass-border hover:border-text-secondary/30'
-                                    }`}
-                            >
-                                <div className="w-8 h-8 rounded-lg bg-white border border-gray-200 flex items-center justify-center text-orange-500">
-                                    <Sun size={16} />
-                                </div>
-                                <div className="text-left">
-                                    <p className={`font-bold ${localSettings.theme === 'light' ? 'text-blue-500' : ''}`}>Light</p>
-                                    <p className="text-xs text-text-muted">Light background</p>
-                                </div>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div>
-                        <label className="block text-sm font-semibold text-text-secondary mb-3">Default View</label>
-                        <div className="grid grid-cols-2 gap-4 bg-glass p-1.5 rounded-xl border border-glass-border">
-                            <button
-                                onClick={() => setLocalSettings({ ...localSettings, defaultView: 'grid' })}
-                                className={`flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm font-medium transition-all ${localSettings.defaultView === 'grid'
-                                        ? 'bg-blue-500 text-white shadow-md'
-                                        : 'text-text-secondary hover:text-white'
-                                    }`}
-                            >
-                                <LayoutGrid size={16} />
-                                Grid View
-                            </button>
-                            <button
-                                onClick={() => setLocalSettings({ ...localSettings, defaultView: 'list' })}
-                                className={`flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm font-medium transition-all ${localSettings.defaultView === 'list'
-                                        ? 'bg-blue-500 text-white shadow-md'
-                                        : 'text-text-secondary hover:text-white'
-                                    }`}
-                            >
-                                <List size={16} />
-                                List View
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             {/* History Section */}
             <div className="section-card p-8">
                 <div className="flex items-center justify-between mb-6">
@@ -285,8 +325,8 @@ function SettingsPage() {
                             <History size={22} className="text-purple-500" />
                         </div>
                         <div>
-                            <h2 className="text-lg font-bold">History</h2>
-                            <p className="text-text-muted text-sm">{history.length} operations recorded</p>
+                            <h2 className="text-lg font-bold">{t('dashboard.recentActivity')}</h2>
+                            <p className="text-text-muted text-sm">{history.length} {t('settings.operationsRecorded', 'operations recorded')}</p>
                         </div>
                     </div>
 
@@ -296,14 +336,14 @@ function SettingsPage() {
                             className="flex items-center gap-2 px-3 py-1.5 text-xs font-medium text-red-500 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors"
                         >
                             <Trash2 size={14} />
-                            Clear All
+                            {t('settings.clearAll', 'Clear All')}
                         </button>
                     )}
                 </div>
 
                 <div className="space-y-3 pl-2 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
                     {history.length === 0 ? (
-                        <div className="text-center py-8 text-text-muted italic">No history yet</div>
+                        <div className="text-center py-8 text-text-muted italic">{t('settings.noHistory', 'No history yet')}</div>
                     ) : (
                         history.map((entry) => (
                             <div key={entry.id} className="flex items-start gap-4 p-4 rounded-xl bg-glass border border-glass-border/50">
@@ -325,7 +365,7 @@ function SettingsPage() {
                                         onClick={() => handleUndo(entry.id)}
                                         className="text-xs text-blue-500 hover:text-blue-400 font-medium underline"
                                     >
-                                        Undo
+                                        {t('settings.undo', 'Undo')}
                                     </button>
                                 )}
                             </div>

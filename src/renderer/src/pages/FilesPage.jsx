@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
+import { useTranslation } from 'react-i18next'
 import {
     Grid,
     List,
@@ -41,16 +42,6 @@ function formatSize(bytes) {
     const sizes = ['B', 'KB', 'MB', 'GB']
     const i = Math.floor(Math.log(bytes) / Math.log(k))
     return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i]
-}
-
-// Format date
-function formatDate(dateString) {
-    const date = new Date(dateString)
-    return date.toLocaleDateString('en-US', {
-        month: 'short',
-        day: 'numeric',
-        year: 'numeric'
-    })
 }
 
 // Get fallback icon based on file extension
@@ -142,6 +133,7 @@ function FileIcon({ file, size = 'large' }) {
 }
 
 function FilesPage() {
+    const { t, i18n } = useTranslation()
     const { category } = useParams()
     const navigate = useNavigate()
     const { files, categorizedFiles, isLoading, scanFiles, getCategoryStats } = useFileStore()
@@ -165,6 +157,16 @@ function FilesPage() {
             document.body.classList.remove('light')
         }
     }, [settings])
+
+    // Format date based on locale
+    const formatDate = (dateString) => {
+        const date = new Date(dateString)
+        return date.toLocaleDateString(i18n.language, {
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric'
+        })
+    }
 
     // Get files to display
     const displayFiles = category && categorizedFiles
@@ -204,10 +206,10 @@ function FilesPage() {
                     )}
                     <div>
                         <h1 className="text-2xl font-bold">
-                            {categoryInfo ? categoryInfo.name : 'All Files'}
+                            {categoryInfo ? t(`categories.${category.toLowerCase()}`, categoryInfo.name) : t('nav.allFiles', 'All Files')}
                         </h1>
                         <p className="text-text-secondary text-sm mt-1">
-                            {filteredFiles.length} files
+                            {filteredFiles.length} {t('files.count', 'files')}
                         </p>
                     </div>
                 </div>
@@ -218,7 +220,7 @@ function FilesPage() {
                         <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted" />
                         <input
                             type="text"
-                            placeholder="Search files..."
+                            placeholder={t('app.search')}
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                             className="w-56 pl-10 pr-4 py-2.5 rounded-xl bg-glass border border-glass-border placeholder:text-text-muted focus:outline-none focus:border-blue-500/50 transition-colors text-sm"
@@ -255,7 +257,7 @@ function FilesPage() {
                                 className="flex items-center gap-2 px-3 py-2 rounded-xl bg-glass hover:bg-glass-hover border border-glass-border text-sm font-medium text-text-secondary hover:text-white transition-all"
                             >
                                 <IconComponent size={14} style={{ color: cat.color }} />
-                                <span>{cat.name}</span>
+                                <span>{t(`categories.${cat.id.toLowerCase()}`, cat.name)}</span>
                                 <span className="text-text-muted text-xs">({cat.count})</span>
                             </button>
                         )
@@ -271,8 +273,8 @@ function FilesPage() {
             ) : filteredFiles.length === 0 ? (
                 <div className="section-card flex flex-col items-center justify-center py-16">
                     <FolderOpen size={48} className="mb-4 opacity-20" />
-                    <p className="text-text-muted font-medium">No files found</p>
-                    <p className="text-sm text-text-muted mt-1">Try a different search or category</p>
+                    <p className="text-text-muted font-medium">{t('messages.noResults', 'No results found')}</p>
+                    <p className="text-sm text-text-muted mt-1">{t('messages.searchOrCategory', 'Try a different search or category')}</p>
                 </div>
             ) : viewMode === 'grid' ? (
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
@@ -302,7 +304,7 @@ function FilesPage() {
                                     handleShowInFolder(file)
                                 }}
                                 className="absolute top-3 right-3 w-7 h-7 rounded-lg bg-black/30 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 text-white/80 hover:text-white hover:bg-black/50 transition-all"
-                                title="Show in folder"
+                                title={t('buttons.showInFolder', 'Show in folder')}
                             >
                                 <ExternalLink size={14} />
                             </button>
@@ -339,7 +341,7 @@ function FilesPage() {
                                     handleShowInFolder(file)
                                 }}
                                 className="w-8 h-8 rounded-lg opacity-0 group-hover:opacity-100 bg-glass hover:bg-glass-hover border border-glass-border flex items-center justify-center text-text-secondary hover:text-blue-500 transition-all"
-                                title="Show in folder"
+                                title={t('buttons.showInFolder', 'Show in folder')}
                             >
                                 <ExternalLink size={14} />
                             </button>

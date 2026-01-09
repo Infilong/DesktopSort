@@ -28,6 +28,7 @@ const settingsStore = new Store({
     
     // UI preferences
     theme: 'dark',
+    language: 'auto', // 'auto' or language code (en, zh, etc.)
     viewMode: 'grid', // 'grid' or 'list'
     sortBy: 'name', // 'name', 'date', 'size', 'type'
     sortOrder: 'asc',

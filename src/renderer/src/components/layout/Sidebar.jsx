@@ -1,13 +1,16 @@
 import { NavLink } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { LayoutDashboard, FolderOpen, Settings, Lightbulb } from 'lucide-react'
 
-const navItems = [
-    { path: '/', icon: LayoutDashboard, label: 'Dashboard' },
-    { path: '/files', icon: FolderOpen, label: 'Files' },
-    { path: '/settings', icon: Settings, label: 'Settings' },
-]
-
 function Sidebar() {
+    const { t } = useTranslation()
+
+    const navItems = [
+        { path: '/', icon: LayoutDashboard, label: t('nav.dashboard') },
+        { path: '/files', icon: FolderOpen, label: t('nav.files') },
+        { path: '/settings', icon: Settings, label: t('nav.settings') },
+    ]
+
     return (
         <aside className="w-72 bg-bg-secondary border-r border-glass-border p-6 flex flex-col shrink-0">
             {/* Brand */}
@@ -43,10 +46,10 @@ function Sidebar() {
                         <div className="p-2 bg-amber-500/20 rounded-lg shrink-0">
                             <Lightbulb size={16} className="text-amber-500" />
                         </div>
-                        <p className="text-xs font-bold text-text-primary uppercase">Quick Tip</p>
+                        <p className="text-xs font-bold text-text-primary uppercase">{t('sidebar.quickTip', 'Quick Tip')}</p>
                     </div>
                     <p className="text-xs text-text-secondary leading-relaxed">
-                        Click "Organize Files" to sort your desktop!
+                        {t('sidebar.tipDescription', 'Click "Organize Files" to sort your desktop!')}
                     </p>
                 </div>
             </div>

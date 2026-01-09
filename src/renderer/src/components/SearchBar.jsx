@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useTranslation } from 'react-i18next'
 import { Search, X, File, Image, FileText, Video, Music, Archive, Code, Package, AppWindow } from 'lucide-react'
 import { useSearchStore } from '../stores/searchStore'
 
@@ -18,6 +19,7 @@ const categoryIcons = {
 }
 
 function SearchBar() {
+    const { t } = useTranslation()
     const navigate = useNavigate()
     const inputRef = useRef(null)
     const { query, results, isSearching, isOpen, setQuery, clearSearch, setOpen } = useSearchStore()
@@ -93,11 +95,11 @@ function SearchBar() {
                     onChange={handleInputChange}
                     onKeyDown={handleKeyDown}
                     onFocus={() => setOpen(true)}
-                    placeholder="Search files..."
+                    placeholder={t('app.search')}
                     className="w-64 pl-11 pr-16 py-2.5 rounded-lg bg-glass border border-glass-border text-text-primary placeholder-text-muted text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all"
                 />
                 <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-text-muted bg-glass-hover px-1.5 py-0.5 rounded border border-glass-border">
-                    ⌘K
+                    {window.process?.platform === 'darwin' ? '⌘K' : 'Ctrl+K'}
                 </span>
             </div>
 
@@ -112,11 +114,11 @@ function SearchBar() {
                     >
                         {isSearching ? (
                             <div className="p-4 text-center text-text-muted text-sm">
-                                Searching...
+                                {t('messages.searching', 'Searching...')}
                             </div>
                         ) : results.length === 0 ? (
                             <div className="p-4 text-center text-text-muted text-sm">
-                                No results found
+                                {t('messages.noResults', 'No results found')}
                             </div>
                         ) : (
                             <div className="py-2">
@@ -135,14 +137,14 @@ function SearchBar() {
                                             <Icon size={18} className="text-text-muted shrink-0" />
                                             <div className="flex-1 min-w-0">
                                                 <p className="text-sm font-medium text-text-primary truncate">{file.name}</p>
-                                                <p className="text-xs text-text-muted truncate capitalize">{file.category}</p>
+                                                <p className="text-xs text-text-muted truncate capitalize">{t(`categories.${file.category.toLowerCase()}`, file.category)}</p>
                                             </div>
                                         </button>
                                     )
                                 })}
                                 {results.length > 10 && (
                                     <div className="px-4 py-2 text-xs text-text-muted text-center border-t border-glass-border">
-                                        +{results.length - 10} more results
+                                        +{results.length - 10} {t('messages.moreResults', 'more results')}
                                     </div>
                                 )}
                             </div>
