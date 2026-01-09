@@ -1,0 +1,36 @@
+{
+  "name": "desktop-sort",
+  "version": "1.0.0",
+  "description": "A full-featured Windows desktop file organizer with one-click organization",
+  "main": "./out/main/index.js",
+  "author": "DesktopSort",
+  "license": "MIT",
+  "scripts": {
+    "dev": "electron-vite dev",
+    "build": "electron-vite build",
+    "preview": "electron-vite preview",
+    "package": "electron-builder --win --config",
+    "package:dir": "electron-builder --win --dir --config"
+  },
+  "dependencies": {
+    "@electron-toolkit/utils": "^3.0.0",
+    "electron-store": "^8.1.0",
+    "framer-motion": "^11.0.0",
+    "lucide-react": "^0.300.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.21.0",
+    "zustand": "^4.4.7"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.2.1",
+    "autoprefixer": "^10.4.16",
+    "electron": "^28.1.0",
+    "electron-builder": "^24.9.1",
+    "electron-vite": "^2.0.0",
+    "postcss": "^8.4.32",
+    "tailwindcss": "^4.0.0",
+    "@tailwindcss/vite": "^4.0.0",
+    "vite": "^5.0.10"
+  }
+}
