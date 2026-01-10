@@ -100,15 +100,6 @@ function DashboardPage() {
 
         const filesToOrganize = unorganizedResult.data
 
-        const confirmResult = await window.electronAPI.dialog.confirm({
-            title: t('dashboard.organizeFiles'),
-            message: t('messages.confirmOrganize', { count: filesToOrganize.length }),
-            detail: t('messages.organizeDetail', 'Files will be moved to categorized folders inside "DesktopSort".\n\nYou can restore them anytime.'),
-            confirmText: t('buttons.yesOrganize', 'Yes, Organize')
-        })
-
-        if (!confirmResult.confirmed) return
-
         setIsOrganizing(true)
         setActionResult(null)
 
@@ -128,20 +119,13 @@ function DashboardPage() {
         }
     }
 
+
+
     const handleRestore = async () => {
         if (organizedCount === 0) {
             setActionResult({ type: 'info', message: t('messages.noRestored', 'No files to restore!') })
             return
         }
-
-        const confirmResult = await window.electronAPI.dialog.confirm({
-            title: t('dashboard.restoreDesktop'),
-            message: t('messages.confirmRestore', { count: organizedCount }),
-            detail: t('messages.restoreDetail', 'All files will be moved back to your Desktop.'),
-            confirmText: t('buttons.yesRestore', 'Yes, Restore')
-        })
-
-        if (!confirmResult.confirmed) return
 
         setIsRestoring(true)
         setActionResult(null)
@@ -161,6 +145,7 @@ function DashboardPage() {
             setIsRestoring(false)
         }
     }
+
 
     const categoryStats = getCategoryStats()
 
@@ -272,7 +257,7 @@ function DashboardPage() {
                 </div>
 
                 <div className="flex-1 overflow-y-auto">
-                    <div className="grid grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                    <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
                         {categoryStats.filter(cat => cat.id !== 'others' || cat.count > 0).map((cat) => {
                             const IconComponent = iconMap[cat.icon] || File
                             const colors = colorMap[cat.color] || colorMap['#64748b']
@@ -283,13 +268,13 @@ function DashboardPage() {
                                     onClick={() => navigate(`/files/${cat.id}`)}
                                     whileHover={{ scale: 1.02, y: -2 }}
                                     whileTap={{ scale: 0.98 }}
-                                    className={`flex flex-col items-center justify-center p-6 rounded-lg border ${colors.bg} ${colors.border} transition-all aspect-square`}
+                                    className={`flex flex-col items-center justify-center p-5 rounded-lg border ${colors.bg} ${colors.border} transition-all`}
                                 >
-                                    <div className={`w-12 h-12 rounded-lg ${colors.bg} flex items-center justify-center mb-3`}>
-                                        <IconComponent size={24} className={colors.icon} />
+                                    <div className={`w-10 h-10 rounded-lg ${colors.bg} flex items-center justify-center mb-2`}>
+                                        <IconComponent size={22} className={colors.icon} />
                                     </div>
-                                    <p className={`text-2xl font-bold ${colors.text}`}>{cat.count}</p>
-                                    <p className="text-xs text-text-muted font-bold uppercase mt-2 truncate w-full">{t(`categories.${cat.id.toLowerCase()}`, cat.name)}</p>
+                                    <p className={`text-xl font-bold ${colors.text}`}>{cat.count}</p>
+                                    <p className="text-xs text-text-muted font-bold uppercase mt-1.5 truncate w-full">{t(`categories.${cat.id.toLowerCase()}`, cat.name)}</p>
                                 </motion.button>
                             )
                         })}

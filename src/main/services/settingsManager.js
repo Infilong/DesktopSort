@@ -6,18 +6,6 @@ const settingsStore = new Store({
     // Destination folder (null = Desktop/DesktopSort)
     destinationPath: null,
     
-    // Organization mode: 'move' or 'copy'
-    defaultMode: 'move',
-    
-    // Show confirmation before organizing
-    confirmBeforeOrganize: true,
-    
-    // Preview changes before executing
-    showPreview: true,
-    
-    // Keep original files when organizing (acts like copy)
-    keepOriginals: false,
-    
     // Custom category rules
     customRules: [],
     
