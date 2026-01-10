@@ -20,7 +20,10 @@ import {
     FolderOpen,
     Monitor,
     Undo2,
-    ArrowRight
+    ArrowRight,
+    Table,
+    Presentation,
+    FileType
 } from 'lucide-react'
 import { useFileStore } from '../stores/fileStore'
 import { useHistoryStore } from '../stores/historyStore'
@@ -28,7 +31,7 @@ import { useSettingsStore } from '../stores/settingsStore'
 
 // Icon mapping for categories
 const iconMap = {
-    Image, FileText, Video, Music, Archive, Code, Package, AppWindow, File
+    Image, FileText, Video, Music, Archive, Code, Package, AppWindow, File, Table, Presentation, FileType
 }
 
 // Color class mapping for categories
@@ -41,7 +44,12 @@ const colorMap = {
     '#10b981': { bg: 'bg-emerald-500/10', border: 'border-emerald-500/20', text: 'text-emerald-500', icon: 'text-emerald-400' },
     '#6366f1': { bg: 'bg-indigo-500/10', border: 'border-indigo-500/20', text: 'text-indigo-500', icon: 'text-indigo-400' },
     '#06b6d4': { bg: 'bg-cyan-500/10', border: 'border-cyan-500/20', text: 'text-cyan-500', icon: 'text-cyan-400' },
-    '#64748b': { bg: 'bg-slate-500/10', border: 'border-slate-500/20', text: 'text-slate-500', icon: 'text-slate-400' }
+    '#64748b': { bg: 'bg-slate-500/10', border: 'border-slate-500/20', text: 'text-slate-500', icon: 'text-slate-400' },
+    // New office colors
+    '#2b579a': { bg: 'bg-[#2b579a]/10', border: 'border-[#2b579a]/20', text: 'text-[#2b579a]', icon: 'text-[#2b579a]' },
+    '#217346': { bg: 'bg-[#217346]/10', border: 'border-[#217346]/20', text: 'text-[#217346]', icon: 'text-[#217346]' },
+    '#d24726': { bg: 'bg-[#d24726]/10', border: 'border-[#d24726]/20', text: 'text-[#d24726]', icon: 'text-[#d24726]' },
+    '#f40f02': { bg: 'bg-[#f40f02]/10', border: 'border-[#f40f02]/20', text: 'text-[#f40f02]', icon: 'text-[#f40f02]' }
 }
 
 function DashboardPage() {
@@ -258,7 +266,7 @@ function DashboardPage() {
 
                 <div className="flex-1 overflow-y-auto">
                     <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                        {categoryStats.filter(cat => cat.id !== 'others' || cat.count > 0).map((cat) => {
+                        {categoryStats.filter(cat => cat.id !== 'others' || cat.count > 0).sort((a, b) => b.count - a.count).map((cat) => {
                             const IconComponent = iconMap[cat.icon] || File
                             const colors = colorMap[cat.color] || colorMap['#64748b']
 

@@ -21,7 +21,8 @@ const resources = {
       },
       "categories": {
         "images": "Images", "documents": "Documents", "videos": "Videos", "audio": "Audio",
-        "archives": "Archives", "code": "Code", "installers": "Installers", "apps": "Apps", "others": "Others"
+        "archives": "Archives", "code": "Code", "installers": "Installers", "apps": "Apps", "others": "Others",
+        "word": "Word", "excel": "Excel", "powerpoint": "PowerPoint", "pdf": "PDF"
       },
       "settings": {
         "title": "Settings", "titleDescription": "Configure your preferences",
@@ -72,7 +73,8 @@ const resources = {
       },
       "categories": {
         "images": "图片", "documents": "文档", "videos": "视频", "audio": "音频",
-        "archives": "压缩包", "code": "代码", "installers": "安装包", "apps": "应用", "others": "其他"
+        "archives": "压缩包", "code": "代码", "installers": "安装包", "apps": "应用", "others": "其他",
+        "word": "Word", "excel": "Excel", "powerpoint": "PowerPoint", "pdf": "PDF"
       },
       "settings": {
         "title": "设置", "titleDescription": "配置您的偏好设置",

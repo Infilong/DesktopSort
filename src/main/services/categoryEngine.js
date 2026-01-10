@@ -9,12 +9,40 @@ const DEFAULT_CATEGORIES = {
     color: '#f472b6',
     extensions: ['jpg', 'jpeg', 'png', 'gif', 'svg', 'webp', 'bmp', 'ico', 'tiff', 'heic']
   },
+  word: {
+    id: 'word',
+    name: 'Word',
+    icon: 'FileText',
+    color: '#2b579a',
+    extensions: ['doc', 'docx', 'rtf', 'odt']
+  },
+  excel: {
+    id: 'excel',
+    name: 'Excel',
+    icon: 'Table',
+    color: '#217346',
+    extensions: ['xls', 'xlsx', 'csv', 'ods']
+  },
+  powerpoint: {
+    id: 'powerpoint',
+    name: 'PowerPoint',
+    icon: 'Presentation',
+    color: '#d24726',
+    extensions: ['ppt', 'pptx', 'odp']
+  },
+  pdf: {
+    id: 'pdf',
+    name: 'PDF',
+    icon: 'FileType',
+    color: '#f40f02',
+    extensions: ['pdf']
+  },
   documents: {
     id: 'documents',
     name: 'Documents',
     icon: 'FileText',
     color: '#3b82f6',
-    extensions: ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'txt', 'rtf', 'odt', 'ods', 'odp', 'csv']
+    extensions: ['txt', 'md', 'log', 'ini', 'cfg']
   },
   videos: {
     id: 'videos',
@@ -42,7 +70,7 @@ const DEFAULT_CATEGORIES = {
     name: 'Code',
     icon: 'Code',
     color: '#10b981',
-    extensions: ['js', 'ts', 'jsx', 'tsx', 'py', 'java', 'cpp', 'c', 'h', 'cs', 'php', 'rb', 'go', 'rs', 'swift', 'kt', 'html', 'css', 'scss', 'json', 'xml', 'yaml', 'yml', 'md', 'sql']
+    extensions: ['js', 'ts', 'jsx', 'tsx', 'py', 'java', 'cpp', 'c', 'h', 'cs', 'php', 'rb', 'go', 'rs', 'swift', 'kt', 'html', 'css', 'scss', 'json', 'xml', 'yaml', 'yml', 'sql']
   },
   apps: {
     id: 'apps',
