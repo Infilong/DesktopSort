@@ -1,6 +1,6 @@
 # DesktopSort
 
-A premium, high-performance desktop file organizer built with Electron, React, and Tailwind CSS. Streamline your workspace with intelligent categorization and instant search.
+A premium, high-performance desktop file organizer built with Electron, React, and Tailwind CSS. Streamline your workspace with intelligent categorization, instant search, and multi-language support.
 
 <div align="center">
   <img src="assets/demo.gif" width="800" alt="DesktopSort Demo" />
@@ -8,39 +8,49 @@ A premium, high-performance desktop file organizer built with Electron, React, a
 
 ## ✨ Key Features
 
-### 🔍 O(1) Instant Search
-Experience lightning-fast file searching powered by a **Trie (Prefix Tree)** data structure.
-- **Instant Results**: Results appear as you type with zero lag.
-- **Global Access**: Search is available on all pages (except Settings).
-- **Keyboard Friendly**: Press `Ctrl + K` to focus the search bar from anywhere.
-- **Smart Navigation**: Use arrow keys and Enter to instantly open files or applications directly from the search results.
+### 🔍 Spotlight-Style Search
+Experience lightning-fast file searching with a beautiful macOS Spotlight-inspired interface.
+- **Instant Results**: Powered by a **Trie (Prefix Tree)** data structure for O(1) prefix matching.
+- **Global Shortcut**: Press `Ctrl + K` from anywhere to open the search modal.
+- **Keyboard Navigation**: Use arrow keys to navigate and Enter to instantly open files.
+- **Elegant UI**: Centered modal with backdrop blur and smooth animations.
 
 ### 🗂️ Smart File Organization
-- **Auto-Categorize**: Sort your messy desktop files into tidy folders like Images, Documents, Videos, Code, and more with a single click.
-- **One-Click Restore**: Changed your mind? Use the Restore function to move everything back to exactly where it was on your desktop.
-- **Native Experience**: High-resolution file icons and direct "Open in Folder" support.
+- **13 Categories**: Word, Excel, PowerPoint, PDF, Images, Videos, Audio, Archives, Code, Apps, Installers, Documents, and Others.
+- **Auto-Categorize**: Sort your messy desktop with a single click.
+- **One-Click Restore**: Move everything back to your desktop instantly.
+- **Smart Sorting**: Categories automatically sort by file count (most files first).
+
+### 🌍 Multi-Language Support
+- **20 Languages**: English, Chinese, Spanish, French, German, Japanese, Korean, and more.
+- **Auto-Detection**: Automatically uses your system language on first launch.
+- **Easy Switching**: Change language anytime from Settings.
 
 ### 🎨 Premium Design
-- **Modern UI**: A clean, spacious, and responsive interface inspired by modern design aesthetics.
-- **Glassmorphism**: Subtle blur effects and rich gradients for a state-of-the-art feel.
-- **Frameless Window**: Custom window controls and draggable header for a seamless desktop experience.
+- **Collapsible Sidebar**: Toggle between full and icon-only sidebar modes.
+- **Glassmorphism**: Subtle blur effects and rich gradients.
+- **Frameless Window**: Custom window controls with smooth dragging and resizing.
+- **Auto-Dismiss Notifications**: Action feedback fades elegantly after 3 seconds.
 
 ## 🚀 How to Use
 
-1.  **Search & Launch**: Press `Ctrl + K` at any time to find any file or app on your desktop. It's the fastest way to get to your work.
-2.  **Organize**: From the Dashboard, click **"Organize Files"**. Your desktop files will be instantly categorized and moved to the `Desktop/DesktopSort` folder.
-3.  **Browse**: Use the Sidebar to navigate through different categories and manage your files.
-4.  **Restore**: If you need to revert the organization, use the **"Restore Desktop"** button in the dashboard or settings to move files back to their original locations.
-5.  **Window Management**: Drag the empty space in the header to move the window, or use the corners to resize.
+1. **Search & Launch**: Press `Ctrl + K` to open Spotlight search. Find and open any file instantly.
+2. **Organize**: Click **"Organize Files"** on the Dashboard to auto-categorize your desktop.
+3. **Browse**: Navigate categories from the sidebar. Click any category to view its files.
+4. **Restore**: Use **"Restore Desktop"** to move all organized files back.
+5. **Customize**: Visit Settings to change language, theme, and organization preferences.
 
 ## 🛠️ Tech Stack
 
-- **Electron**: Cross-platform runtime
-- **React**: UI logic and components
-- **Tailwind CSS**: Modern styling system
-- **Zustand**: Lightweight state management
-- **Trie Algorithm**: O(1) search indexing
-- **Framer Motion**: Smooth micro-animations
+| Technology | Purpose |
+|------------|---------|
+| **Electron** | Cross-platform desktop runtime |
+| **React** | UI components and state |
+| **Tailwind CSS** | Utility-first styling |
+| **Zustand** | Lightweight state management |
+| **Trie Algorithm** | O(1) search indexing |
+| **Framer Motion** | Smooth animations |
+| **i18next** | Internationalization |
 
 ## 📦 Installation & Development
 
