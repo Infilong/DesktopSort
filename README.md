@@ -6,6 +6,12 @@ A premium, high-performance desktop file organizer built with Electron, React, a
   <img src="assets/demo.gif" width="800" alt="DesktopSort Demo" />
 </div>
 
+## 📥 Download
+
+**[⬇️ Download DesktopSort for Windows](https://github.com/Infilong/DesktopSort/releases/latest)**
+
+Just download the `.exe` installer, run it, and you're ready to go!
+
 ## ✨ Key Features
 
 ### 🔍 Spotlight-Style Search
