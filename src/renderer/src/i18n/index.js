@@ -51,7 +51,8 @@ const resources = {
         "confirmRestore": "Restore {{count}} files to Desktop?",
         "restoreDetail": "All files will be moved back to your Desktop.",
         "restoredSuccess": "Restored {{count}} files!",
-        "restoreFailed": "Failed to restore"
+        "restoreFailed": "Failed to restore",
+        "typeToSearch": "Type to search files..."
       }
     }
   },

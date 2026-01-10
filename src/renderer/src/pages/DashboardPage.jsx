@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
 import {
     Sparkles,
@@ -98,6 +98,16 @@ function DashboardPage() {
             console.error('Failed to count files:', error)
         }
     }
+
+    // Auto-dismiss notification after 3 seconds
+    useEffect(() => {
+        if (actionResult) {
+            const timer = setTimeout(() => {
+                setActionResult(null)
+            }, 3000)
+            return () => clearTimeout(timer)
+        }
+    }, [actionResult])
 
     const handleOrganize = async () => {
         const unorganizedResult = await window.electronAPI.files.scanUnorganized()
@@ -237,19 +247,23 @@ function DashboardPage() {
             </section>
 
             {/* Result Message */}
-            {actionResult && (
-                <motion.div
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-bold ${actionResult.type === 'success'
-                        ? 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/20'
-                        : 'bg-blue-500/10 text-blue-500 border border-blue-500/20'
-                        }`}
-                >
-                    {actionResult.type === 'error' ? <AlertCircle size={16} /> : <CheckCircle size={16} />}
-                    <span>{actionResult.message}</span>
-                </motion.div>
-            )}
+            <AnimatePresence>
+                {actionResult && (
+                    <motion.div
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        transition={{ duration: 0.3 }}
+                        className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-bold ${actionResult.type === 'success'
+                            ? 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/20'
+                            : 'bg-blue-500/10 text-blue-500 border border-blue-500/20'
+                            }`}
+                    >
+                        {actionResult.type === 'error' ? <AlertCircle size={16} /> : <CheckCircle size={16} />}
+                        <span>{actionResult.message}</span>
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
             {/* Categories */}
             <section className="flex-1 min-h-0 flex flex-col">
